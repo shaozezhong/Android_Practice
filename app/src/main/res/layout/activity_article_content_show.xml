@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.myapplication.ArticleContentShow">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/contentToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@mipmap/fanhui"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="#fff"></androidx.appcompat.widget.Toolbar>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp" />
+
+    <ImageView
+        android:id="@+id/mistake"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:src="@drawable/h5_load_errpr" />
+
+    <TextView
+        android:id="@+id/mistake_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="数据加载失败"
+        android:textColor="#C1C1C1"
+        android:textSize="24sp"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/mistake_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请检查您的手机是否断网"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#C1C1C1"
+        android:textSize="24sp"
+        ></TextView>
+
+
+</LinearLayout>

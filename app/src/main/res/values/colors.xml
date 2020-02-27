@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="tab_checked">#ED6A2C</color>
+    <color name="tab_unchecked">#757575</color>
+    <color name="colorbttonfont">#5E5E5E</color>
+    <color name="colorblue">#2196f3</color>
+    <color name="colortitle">#474747</color>
+    <color name="colororange">#FFA500</color>
+    <color name="colorpurple">#7e57c2</color>
+    <color name="colorpurple2">#B23AEE</color>
+    <color name="white">#ffffff</color>
+    <color name="nowhite">#EDEDED</color>
+</resources>
