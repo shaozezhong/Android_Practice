@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context="com.example.myapplication.Bottom">
 
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar4"
         android:layout_width="match_parent"
@@ -14,18 +15,27 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
+
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="要闻"
-            android:textSize="22sp"
             android:textColor="#ffffff"
-            android:textStyle="bold"
-            />
-    </androidx.appcompat.widget.Toolbar>
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="悬浮窗"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:onClick="startFloate"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <com.example.myapplication.CustomViewPager
         android:id="@+id/vp"

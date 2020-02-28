@@ -1,13 +1,11 @@
 package com.example.myapplication;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.myapplication.window.FloatingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +13,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.Menu;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class Bottom extends AppCompatActivity {
     private MenuItem menuItem;
     private long exitTime = 0;
     private String test;
+    private TextView floatwindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)    {
@@ -37,7 +38,7 @@ public class Bottom extends AppCompatActivity {
         setContentView(R.layout.content_bottom);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-      //  BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        //  BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         viewPager = (CustomViewPager) findViewById(R.id.vp);
         viewPager.setOffscreenPageLimit(3);
            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar4);
@@ -76,6 +77,28 @@ public class Bottom extends AppCompatActivity {
         list.add(new MainFragment());
         viewPagerAdapter.setList(list);
 
+    }
+    public void startFloate(View view) {
+        if (FloatingService.isStarted) {
+            return;
+        }
+        if (!Settings.canDrawOverlays(this)) {
+            Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+            startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+        } else {
+            startService(new Intent(this, FloatingService.class));
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (!Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
+                startService(new Intent(Bottom.this, FloatingService.class));
+            }
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

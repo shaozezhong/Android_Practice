@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +34,8 @@
             android:screenOrientation="sensor"
             android:label="资讯要闻">
         </activity>
+        <service android:name=".window.FloatingService"></service>
+
     </application>
 
 </manifest>
