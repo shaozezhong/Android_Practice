@@ -1,8 +1,12 @@
 package com.example.myapplication;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +30,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.myapplication.Interface.OnItemClickListener;
 import com.example.myapplication.allbean.RecommendBean;
+import com.example.myapplication.window.FloatingService;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -62,6 +67,19 @@ public class MainFragment extends Fragment {
     private int count = 0;
     public static  OnLoadMoreListener mOnLoadMoreListener;
  //   public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private FloatingService.ConnectBinder connectBinder;
+    private ServiceConnection connect = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            connectBinder = (FloatingService.ConnectBinder) service;
+            connectBinder.changeReceyerView("你好");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +100,10 @@ public class MainFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()  {
             @Override
             public void onRefresh()  {
-                createThread();
-                Toast.makeText(getActivity(), "刷新成功", Toast.LENGTH_LONG).show();
+                Intent bindtent = new Intent(getActivity(),FloatingService.class);
+                getActivity().bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+        //        createThread();
+          //      Toast.makeText(getActivity(), "刷新成功", Toast.LENGTH_LONG).show();
             }
         });
     }

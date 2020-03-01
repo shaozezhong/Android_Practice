@@ -14,7 +14,14 @@
         android:layout_gravity="right"
         android:src="@drawable/delete" />
 
+    <TextView
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/float_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

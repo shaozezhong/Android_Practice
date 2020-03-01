@@ -3,6 +3,7 @@ package com.example.myapplication.window;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -11,12 +12,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by szz on 2020/2/28.
@@ -29,6 +37,11 @@ public class FloatingService extends Service {
     private WindowManager.LayoutParams layoutParams;
     private ImageView delete;
     private View displayView;
+    private RecyclerView recyclerView;
+    private List<String> data = new ArrayList(){};
+    private RecyclerView.Adapter adapter;
+//与活动进行通信
+    private ConnectBinder mBinder = new ConnectBinder();
 
 
     @Override
@@ -55,7 +68,7 @@ public class FloatingService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -64,23 +77,68 @@ public class FloatingService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+
     private void showFloatingWindow() {
         if (Settings.canDrawOverlays(this)) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             displayView = layoutInflater.inflate(R.layout.float_view, null);
             displayView.setOnTouchListener(new FloatingOnTouchListener());
             delete = displayView.findViewById(R.id.delete);
+            //列表
+            data.add("aaaa");
+            data.add("bbbb");
+            data.add("cccc");
+            data.add("dddd");
+            data.add("eeee");
+            data.add("fffff");
+            recyclerView = displayView.findViewById(R.id.float_recyclerview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            initAdapter();
+            recyclerView.setAdapter(adapter);
+
             windowManager.addView(displayView, layoutParams);
             delete.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     windowManager.removeView(displayView);
                     isStarted = false;
+                 //   onDestroy();
                 }
             });
-
         }
     }
+    private void initAdapter() {
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        adapter = new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = inflater.inflate(R.layout.float_list, parent, false);
+                return new GoodsViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                GoodsViewHolder viewHolder = (GoodsViewHolder) holder;
+                viewHolder.testview.setText(data.get(position));
+            }
+
+            @Override
+            public int getItemCount() {
+                return data.size();
+            }
+        };
+    }
+    class GoodsViewHolder extends RecyclerView.ViewHolder {
+
+        TextView testview;
+
+        public GoodsViewHolder(final View itemView) {
+            super(itemView);
+            this.testview = (TextView) itemView.findViewById(R.id.text1);
+        }
+    };
+
+
 
 
     private class FloatingOnTouchListener implements View.OnTouchListener {
@@ -109,6 +167,14 @@ public class FloatingService extends Service {
                     break;
             }
             return false;
+        }
+    }
+   public  class ConnectBinder extends Binder{
+        public void changeReceyerView(String input){
+            data.add(0,input);
+            adapter.notifyItemInserted(0);
+            recyclerView.getLayoutManager().scrollToPosition(0);
+
         }
     }
 }

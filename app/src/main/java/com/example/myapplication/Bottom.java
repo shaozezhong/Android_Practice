@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -87,6 +88,8 @@ public class Bottom extends AppCompatActivity {
             startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
         } else {
             startService(new Intent(this, FloatingService.class));
+            FloatingService.isStarted=true;
+            Log.e("service",String.valueOf(FloatingService.isStarted));
         }
     }
     @Override
