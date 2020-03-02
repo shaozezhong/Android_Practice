@@ -67,19 +67,7 @@ public class MainFragment extends Fragment {
     private int count = 0;
     public static  OnLoadMoreListener mOnLoadMoreListener;
  //   public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private FloatingService.ConnectBinder connectBinder;
-    private ServiceConnection connect = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            connectBinder = (FloatingService.ConnectBinder) service;
-            connectBinder.changeReceyerView("你好");
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,10 +88,10 @@ public class MainFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()  {
             @Override
             public void onRefresh()  {
-                Intent bindtent = new Intent(getActivity(),FloatingService.class);
-                getActivity().bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
-        //        createThread();
-          //      Toast.makeText(getActivity(), "刷新成功", Toast.LENGTH_LONG).show();
+      //          Intent bindtent = new Intent(getActivity(),FloatingService.class);
+        //        getActivity().bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+                createThread();
+                Toast.makeText(getActivity(), "刷新成功", Toast.LENGTH_LONG).show();
             }
         });
     }

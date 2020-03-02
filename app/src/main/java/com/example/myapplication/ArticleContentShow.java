@@ -2,13 +2,19 @@ package com.example.myapplication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,6 +26,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myapplication.window.FloatingService;
+
 public class ArticleContentShow extends AppCompatActivity {
     private WebView webView = null;
     private ImageView image_mistake = null;
@@ -30,6 +38,21 @@ public class ArticleContentShow extends AppCompatActivity {
     private Intent data;
     private String share_url;
     private Toolbar toolbar;
+    private String text;
+
+    private FloatingService.ConnectBinder connectBinder;
+    private ServiceConnection connect = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            connectBinder = (FloatingService.ConnectBinder) service;
+            connectBinder.changeReceyerView(text);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -53,6 +76,7 @@ public class ArticleContentShow extends AppCompatActivity {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         webSettings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setDomStorageEnabled(true);
         webSettings.setAppCacheEnabled(true);// 应用可以有缓存
@@ -68,7 +92,27 @@ public class ArticleContentShow extends AppCompatActivity {
         });
     }
 
+    class MyJavaScriptInterface {
+        @JavascriptInterface
+        @SuppressWarnings("unused")
+        public void processHTML(String html) {
+            String html2 = html.substring(100,800);
+            //Log.e("HTML_SZZ",html);
+/*
+            Log.e("HTML_weizhi",html2);
+            Log.e("HTML_weizhi",String.valueOf(html2.indexOf("href")+6));
+            Log.e("HTML_weizhi",String.valueOf(html2.indexOf(".css")+5));
 
+            Log.e("HTML_weizhi",html2.substring(html2.indexOf("href")+6,html2.indexOf(".css")+4));
+*/
+        //                                 html2.indexOf("shtml")         html2.substring(html2.substring(0,html2.indexOf("shtml")).lastIndexOf("http"),html2.indexOf("shtml"))
+           text = html2.substring(html2.indexOf("src=")+5,html2.indexOf(".js")+3);
+
+            Intent bindtent = new Intent(ArticleContentShow.this , FloatingService.class);
+            bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+            //     String output1 = html.substring(html.indexOf("src=")+4,html.indexOf(".js"+3));
+        }
+    }
 
     private void initViews() {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -79,7 +123,7 @@ public class ArticleContentShow extends AppCompatActivity {
         text_mistake2= (TextView) findViewById(R.id.mistake_text1);
         data = getIntent();
         share_url = data.getStringExtra("url");
-        webView.loadUrl(share_url);
+
         webView.setWebViewClient(new WebViewClient() {
             private boolean loadError = false;
             @Override
@@ -102,6 +146,7 @@ public class ArticleContentShow extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                webView.loadUrl("javascript:HTMLOUT.processHTML(document.documentElement.outerHTML);");
                 super.onPageFinished(view, url);
                 if (loadError != true) {
                     image_mistake.setVisibility(View.GONE);
@@ -113,6 +158,7 @@ public class ArticleContentShow extends AppCompatActivity {
 
             }
         });
+        webView.loadUrl(share_url);
     }
 
 }

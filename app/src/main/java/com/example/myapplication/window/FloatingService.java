@@ -72,7 +72,7 @@ public class FloatingService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId)  {
         showFloatingWindow();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -85,12 +85,7 @@ public class FloatingService extends Service {
             displayView.setOnTouchListener(new FloatingOnTouchListener());
             delete = displayView.findViewById(R.id.delete);
             //列表
-            data.add("aaaa");
-            data.add("bbbb");
-            data.add("cccc");
-            data.add("dddd");
-            data.add("eeee");
-            data.add("fffff");
+            data.add("  ");
             recyclerView = displayView.findViewById(R.id.float_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             initAdapter();
