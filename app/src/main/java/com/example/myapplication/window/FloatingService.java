@@ -166,9 +166,12 @@ public class FloatingService extends Service {
     }
    public  class ConnectBinder extends Binder{
         public void changeReceyerView(String input){
-            data.add(0,input);
-            adapter.notifyItemInserted(0);
-            recyclerView.getLayoutManager().scrollToPosition(0);
+            for(int i=0;i<2;i++){
+                data.add(0,input.split(" ")[i]);
+                adapter.notifyItemInserted(0);
+                recyclerView.getLayoutManager().scrollToPosition(0);
+
+            }
 
         }
     }

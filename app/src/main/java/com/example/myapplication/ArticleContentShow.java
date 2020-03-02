@@ -97,19 +97,12 @@ public class ArticleContentShow extends AppCompatActivity {
         @SuppressWarnings("unused")
         public void processHTML(String html) {
             String html2 = html.substring(100,800);
-            //Log.e("HTML_SZZ",html);
-/*
-            Log.e("HTML_weizhi",html2);
-            Log.e("HTML_weizhi",String.valueOf(html2.indexOf("href")+6));
-            Log.e("HTML_weizhi",String.valueOf(html2.indexOf(".css")+5));
+           text = html2.substring(html2.indexOf("src=")+5,html2.indexOf(".js")+3)+" "+html2.substring(html2.substring(0,html2.indexOf("shtml")).lastIndexOf("http"),html2.indexOf("shtml")+5);
+            if (FloatingService.isStarted){
+                Intent bindtent = new Intent(ArticleContentShow.this , FloatingService.class);
+                bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
 
-            Log.e("HTML_weizhi",html2.substring(html2.indexOf("href")+6,html2.indexOf(".css")+4));
-*/
-        //                                 html2.indexOf("shtml")         html2.substring(html2.substring(0,html2.indexOf("shtml")).lastIndexOf("http"),html2.indexOf("shtml"))
-           text = html2.substring(html2.indexOf("src=")+5,html2.indexOf(".js")+3);
-
-            Intent bindtent = new Intent(ArticleContentShow.this , FloatingService.class);
-            bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+            }
             //     String output1 = html.substring(html.indexOf("src=")+4,html.indexOf(".js"+3));
         }
     }
