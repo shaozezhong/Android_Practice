@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     String APPSECRET = "466cfd2211598a215b8ef13293a5479e";
     private ImageView imageView;
     private EditText et_phoneNum, et_password;
-    private TextView btn_login, btn_getMsg;
+    private TextView btn_login, btn_getMsg, btn_name;
     private int i = 30;//计时器
 
     @Override
@@ -42,6 +42,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_login);
         //如果 targetSdkVersion小于或等于22，可以忽略这一步，如果大于或等于23，需要做权限的动态申请：
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.READ_LOGS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.SET_DEBUG_APP, Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_APN_SETTINGS};
             ActivityCompat.requestPermissions(this, mPermissionList, 123);
@@ -67,13 +70,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initView() {
 
-        et_phoneNum = findViewById(R.id.et_phoneNum);
-        et_password = findViewById(R.id.user_password);
-        btn_getMsg = findViewById(R.id.btn_getMsg);
-        btn_login = findViewById(R.id.btn_login);
+        et_phoneNum = findViewById(R.id.sms_name);
+        et_password = findViewById(R.id.sms_password);
+        btn_getMsg = findViewById(R.id.textView2);
+        btn_login = findViewById(R.id.btn_login_sms);
+        btn_name = findViewById(R.id.textView3);
         btn_login.setOnClickListener(this);
         btn_getMsg.setOnClickListener(this);
-
+        btn_name.setOnClickListener(this);
 
     }
 
@@ -114,7 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         String phoneNum = et_phoneNum.getText().toString();
         switch (view.getId()){
-            case R.id.btn_getMsg:
+            case R.id.textView2:
                 // 1. 判断手机号是不是11位并且看格式是否合理
                 if (!judgePhoneNums(phoneNum)){
                     return;
@@ -143,7 +147,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }).start();
                 break;
 
-            case R.id.btn_login:
+            case R.id.btn_login_sms:
                 if (et_phoneNum == null){
                     Toast.makeText(MainActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onClick: 手机号不能为空");
@@ -154,6 +158,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //将收到的验证码和手机号提交再次核对
                 SMSSDK.submitVerificationCode("86", phoneNum, et_password
                         .getText().toString());
+                break;
+            case R.id.textView3:
+                       Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                       startActivity(intent);
+                       finish();
                 break;
         }
     }

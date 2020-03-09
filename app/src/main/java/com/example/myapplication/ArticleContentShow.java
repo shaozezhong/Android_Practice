@@ -64,7 +64,7 @@ public class ArticleContentShow extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             connectBinder = (FloatingService.ConnectBinder) service;
-            connectBinder.changeReceyerView(text);
+            connectBinder.changeReceyerView(out_put+";"+response_print);
         }
 
         @Override
@@ -135,27 +135,14 @@ public class ArticleContentShow extends AppCompatActivity {
         text_mistake2= (TextView) findViewById(R.id.mistake_text1);
         data = getIntent();
         share_url = data.getStringExtra("url");
-        testAsyncGetRequest(share_url);
         webView.setWebViewClient(new WebViewClient() {
             private boolean loadError = false;
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                Log.e("LoginActivity_result","次数");
-
-                String response = "<html>\n" +
-                        "<title>打印信息</title>\n" +
-                        "<body>\n" +
-                        "打印信息：<br>" +
-                        "url："+url+"<br>"+
-                        "header信息："+out_put+"<br>"+
-                        "响应信息："+response_print+"<br>"+
-                        "</body>\n" +
-                        "<html>";
-        //        Log.e("output_test",ArticleContentShow.out_put );
-
-                WebResourceResponse webResourceResponse = new WebResourceResponse("text/html", "utf-8", new ByteArrayInputStream(response.getBytes()));
-
-                return webResourceResponse;
+                if (url.contains("html")){
+                    testAsyncGetRequest(url);
+                }
+                return null;
             }
 
             @Override
@@ -209,6 +196,14 @@ public class ArticleContentShow extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     response_print = response.body().toString();
+                    if (FloatingService.isStarted){
+                        Intent bindtent = new Intent(ArticleContentShow.this , FloatingService.class);
+                        bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+                        unbindService(connect);
+
+                    }
+                    Log.e("LoginActivity", "--->"+response_print);
+
                 } else {
                     Log.e("LoginActivity", "onResponse failed");
                 }

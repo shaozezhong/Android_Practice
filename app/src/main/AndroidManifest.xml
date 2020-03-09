@@ -37,6 +37,7 @@
         </activity>
         <activity
             android:name=".login.MainActivity"
+            android:theme="@style/LoginTheme"
             android:label="短信登录">
         </activity>
         <activity
@@ -45,7 +46,9 @@
 
         <activity
             android:name=".login.LoginActivity"
-            android:label="注册">
+            android:label="注册"
+            android:theme="@style/LoginTheme"
+            android:windowTranslucentStatus="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,12 +1,22 @@
 package com.example.myapplication.login;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.util.Log;
 
 
 import com.example.myapplication.ArticleContentShow;
+import com.example.myapplication.window.FloatingService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -29,7 +39,19 @@ public class HttpInterceptor implements Interceptor {
         //拦截指定地址
         Log.e("LoginActivity",request.url().toString());
         if ("POST".equals(request.method())){
-            String responseString = "true";
+            List<String> login = new ArrayList<>();
+            FormBody formBody = (FormBody) request.body();
+            String responseString ;
+            for (int i = 0; i < formBody.size(); i++) {
+                login.add(formBody.encodedValue(i));
+                Log.e("拦截器",formBody.encodedName(i)+"--->"+formBody.encodedValue(i));
+            }
+            if(login.get(0).equals("admin")&&login.get(1).equals("123")){
+                 responseString = "true";
+            }else {
+                 responseString = "false";
+            }
+
             responseBuilder.body(ResponseBody.create(
                     MediaType.parse("application/json"),
                     responseString.getBytes()));
@@ -42,14 +64,11 @@ public class HttpInterceptor implements Interceptor {
             for (int i = 0; i < responseHeadersLength; i++){
                 String headerName = responseHeaders.name(i);
                 String headerValue = responseHeaders.get(headerName);
-                output.append("Header_Name:"+headerName+"--->Value:"+headerValue+"<br>");
-                //    responseString = responseString+"Header_Name:"+headerName+"------------>Value:"+headerValue+"\n";
-          //      Log.e("output_test",output.toString());
-                //   System.out.print(output.toString());
+                output.append("Header_Name:"+headerName+"--->Value:"+headerValue+";");
             }
-            ArticleContentShow.out_put = output.toString();
-       //     Log.e("output_test",ArticleContentShow.out_put );
+            Log.e("output_test",output.toString());
 
+            ArticleContentShow.out_put = output.toString()+request.url().toString();
         }
           return response;
     }

@@ -1,6 +1,7 @@
 package com.example.myapplication.login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -39,12 +40,17 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_login_activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
          init();
         sms.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         // 登录监听事件
@@ -70,11 +76,6 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 }.start();*/
-
-
-
-
-
                 String name = login_name.getText().toString().trim();
                 String pass = pass_word.getText().toString().trim();
                 if (name.length() == 0)
@@ -115,17 +116,16 @@ public class LoginActivity extends BaseActivity {
                 .addInterceptor(new HttpInterceptor())
                 .build();//新建一个okhttpClient对象，并且设置拦截器
         RequestBody body = new FormBody.Builder()
-                .add("name", name)
+                .add("username", name)
                 .add("password", password).build();
 
         Request request = new Request.Builder()
-                .url("https://www.baidu.com")
+                .url("https://10jqka.com.cn/upass/api/login")
                 .post(body)
                 .build();//新建Request对象
         Callback callback = new Callback() {// 新建异步请求的回调函数
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
 
                 Log.e("LoginActivity", "request Failed ; " + e.getLocalizedMessage());
             }
@@ -133,21 +133,13 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-
-                    Intent intent = new Intent(LoginActivity.this,Bottom.class);
-                    startActivity(intent);
-                    finish();
-
-                    Headers responseHeaders = response.headers();
-
-                    int responseHeadersLength = responseHeaders.size();
-                    for (int i = 0; i < responseHeadersLength; i++){
-                        String headerName = responseHeaders.name(i);
-                        String headerValue = responseHeaders.get(headerName);
-                        System.out.print("TAG----------->Name:"+headerName+"------------>Value:"+headerValue+"\n");
-                    }
-
-                    Log.e("LoginActivity", "onResponse:" + response.body().string());
+                     String result = response.body().string();
+                     if(result.equals("true")){
+                         Intent intent = new Intent(LoginActivity.this,Bottom.class);
+                         startActivity(intent);
+                         finish();
+                     }
+                    Log.e("LoginActivity", "onResponse:" + result);
                 } else {
                     Log.e("LoginActivity", "onResponse failed");
                 }
@@ -161,8 +153,6 @@ public class LoginActivity extends BaseActivity {
         pass_word = (EditText) findViewById(R.id.et_mima);
         btn_login = (TextView) findViewById(R.id.main_btn_login);
         sms = (TextView) findViewById(R.id.textView26);
-
-
     }
     protected void loginJudge(final String userName, final String userPassword) {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()

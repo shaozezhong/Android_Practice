@@ -10,19 +10,19 @@
         layout="@layout/title_layout" />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout"
-        android:layout_marginTop="14dp"
         android:layout_below="@+id/textView34"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_marginTop="14dp">
 
         <include
             android:id="@+id/input_layout"
+            layout="@layout/input_layout"
             android:layout_width="match_parent"
-            android:layout_height="130dip"
-            layout="@layout/input_layout" />
+            android:layout_height="130dip" />
 
 
     </RelativeLayout>
@@ -32,13 +32,16 @@
         android:textColor="#4d4c4c"
         android:textSize="20sp"
         android:background="@drawable/text_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="255dp"
+        android:layout_height="46dp"
         android:paddingBottom="2dip"
         android:paddingLeft="15dip"
         android:paddingRight="15dip"
         android:paddingTop="2dip"
-        android:text="                  登          录                   "
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+
+        android:text="登录"
         android:layout_below="@+id/cb_auto"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp" />

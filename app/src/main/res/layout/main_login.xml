@@ -2,90 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/smssdk_login_bg"
+    android:background="@drawable/denglu8"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="74dp"
+        android:padding="14dp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp"
-        android:src="@drawable/smssdk_while_left_arrow" />
+        android:layout_below="@+id/textView34"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="14dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp">
-
-        <EditText
-            android:id="@+id/et_phoneNum"
+        <include
+            android:id="@+id/input_layout"
+            layout="@layout/sms_input_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:maxLength="11"
-            android:background="@null"
-            android:hint="@string/smssdk_label_phone"
-            android:inputType="phone"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/smssdk_hint_textcolor"
-            android:textSize="16sp" />
+            android:layout_height="130dip" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/smssdk_white_line" />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp">
-
-        <EditText
-            android:id="@+id/user_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/tvCode"
-            android:background="@null"
-            android:hint="@string/smssdk_identify_code"
-            android:maxLength="6"
-            android:inputType="number"
-            android:textColor="@android:color/white"
-            android:textColorHint="@color/smssdk_hint_textcolor"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/btn_getMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="@string/smssdk_get_code"
-            android:textColor="@color/smssdk_getcode_textcolor_selector"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/smssdk_white_line" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_login_sms"
         android:layout_width="255dp"
         android:layout_height="46dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:background="@drawable/smssdk_corner_white_bg"
+        android:background="@drawable/text_bg"
         android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:text="@string/smssdk_verify"
-        android:textColor="@color/smssdk_verify_textcolor_selector"
+        android:textColor="#4d4c4c"
         android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="账号密码登录" />
 </LinearLayout>
