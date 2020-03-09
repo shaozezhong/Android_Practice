@@ -45,7 +45,6 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         // 登录监听事件
@@ -137,6 +136,7 @@ public class LoginActivity extends BaseActivity {
 
                     Intent intent = new Intent(LoginActivity.this,Bottom.class);
                     startActivity(intent);
+                    finish();
 
                     Headers responseHeaders = response.headers();
 

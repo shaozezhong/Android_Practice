@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.myapplication.login.BaseActivity;
 import com.example.myapplication.window.FloatingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -23,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bottom extends AppCompatActivity {
+public class Bottom extends BaseActivity {
     private BottomNavigationView bottomNavigationView;
     private ViewPagerAdapter viewPagerAdapter;
     private CustomViewPager viewPager;
