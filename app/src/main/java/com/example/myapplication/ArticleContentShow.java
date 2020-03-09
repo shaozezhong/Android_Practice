@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -26,7 +28,22 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myapplication.login.HttpInterceptor;
+import com.example.myapplication.login.LoggingInterceptor;
 import com.example.myapplication.window.FloatingService;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ArticleContentShow extends AppCompatActivity {
     private WebView webView = null;
@@ -39,6 +56,8 @@ public class ArticleContentShow extends AppCompatActivity {
     private String share_url;
     private Toolbar toolbar;
     private String text;
+    public static  String out_put;
+    public static  String response_print;
 
     private FloatingService.ConnectBinder connectBinder;
     private ServiceConnection connect = new ServiceConnection() {
@@ -116,14 +135,29 @@ public class ArticleContentShow extends AppCompatActivity {
         text_mistake2= (TextView) findViewById(R.id.mistake_text1);
         data = getIntent();
         share_url = data.getStringExtra("url");
-
+        testAsyncGetRequest(share_url);
         webView.setWebViewClient(new WebViewClient() {
             private boolean loadError = false;
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                Log.e("LoginActivity_result","次数");
+
+                String response = "<html>\n" +
+                        "<title>打印信息</title>\n" +
+                        "<body>\n" +
+                        "打印信息：<br>" +
+                        "url："+url+"<br>"+
+                        "header信息："+out_put+"<br>"+
+                        "响应信息："+response_print+"<br>"+
+                        "</body>\n" +
+                        "<html>";
+        //        Log.e("output_test",ArticleContentShow.out_put );
+
+                WebResourceResponse webResourceResponse = new WebResourceResponse("text/html", "utf-8", new ByteArrayInputStream(response.getBytes()));
+
+                return webResourceResponse;
             }
+
             @Override
             public void onReceivedError(WebView view, int errorCode,
                                         String description, String failingUrl) {
@@ -153,5 +187,34 @@ public class ArticleContentShow extends AppCompatActivity {
         });
         webView.loadUrl(share_url);
     }
+    private void testAsyncGetRequest(String url) {
+   //     HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new LoggingInterceptor());
+    //    logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okHttpClient = new OkHttpClient()
+                .newBuilder()
+                .addInterceptor(new HttpInterceptor())
+     //           .addNetworkInterceptor(logInterceptor)
+                .build();//新建一个okhttpClient对象，并且设置拦截器
+        Request request = new Request.Builder()
+                .url(url)
+                .build();//新建Request对象
+        Callback callback = new Callback() {// 新建异步请求的回调函数
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("LoginActivity", "request Failed ; " + e.getLocalizedMessage());
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful()) {
+                    response_print = response.body().toString();
+                } else {
+                    Log.e("LoginActivity", "onResponse failed");
+                }
+            }
+        };
+        okHttpClient.newCall(request).enqueue(callback);//用okhttpClient执行request，并且注册回调函数
+
+    }
 }

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion 29
@@ -11,11 +13,22 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+}
+MobSDK {
+//    domain 'jp'
+    appKey '2e3fd688c9421'
+    appSecret '466cfd2211598a215b8ef13293a5479e'
+
+    SMSSDK {
+        // 若使用GUI的自动填充验证码功能，需打开此设置
+//        autoSMS true
     }
 }
 
@@ -36,5 +49,6 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
