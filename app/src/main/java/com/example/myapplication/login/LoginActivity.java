@@ -3,6 +3,8 @@ package com.example.myapplication.login;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +16,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Bottom;
+import com.example.myapplication.Http.OkHttpUtil;
 import com.example.myapplication.R;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -35,6 +40,10 @@ public class LoginActivity extends BaseActivity {
     private EditText pass_word;
     private TextView btn_login;
     private TextView sms;
+    private MyProgressbar progressbar;
+    private View mInputLayout;
+    private View progress;
+    private static final String URL = "https://10jqka.com.cn/upass/api/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,25 +66,6 @@ public class LoginActivity extends BaseActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-
-             /*   new Thread() {
-                    public void run() {
-                        OkHttpClient client = new OkHttpClient();
-                        Request request = new Request.Builder()
-                                .url("https://www.baidu.com")
-                                .build();
-                        try{
-                            Response response = client.newCall(request).execute();
-                            if (response.isSuccessful()){
-                                String data = response.body().string();
-                                Log.e("LoginActivity",data);
-                            }else {
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();*/
                 String name = login_name.getText().toString().trim();
                 String pass = pass_word.getText().toString().trim();
                 if (name.length() == 0)
@@ -84,33 +74,59 @@ public class LoginActivity extends BaseActivity {
                     if (pass.length() == 0)
                         Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                     else {
-                        testAsyncGetRequest(name,pass);
-                      /*  new Thread() {
-                            public void run() {
-                                OkHttpClient client = new OkHttpClient();
-                                Request request = new Request.Builder()
-                                        .url("https://www.baidu.com")
-                                        .build();
-                                try{
-                                    Response response = client.newCall(request).execute();
-                                    if (response.isSuccessful()){
-                                        String data = response.body().string();
-                                        Log.e("LoginActivity",data);
-                                    }else {
+                        Map<String,String> map =  new HashMap<String, String>();
+                               map.put("username", name);
+                               map.put("password", pass);
+                        OkHttpUtil.doPost(URL,map, new Callback() {// 新建异步请求的回调函数
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.e("LoginActivity", "request Failed ; " + e.getLocalizedMessage());
+                                Looper.prepare();
+                                Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                if (response.isSuccessful()) {
+                                    String result = response.body().string();
+                                    if(result.equals("true")){
+                                        //换成进度条
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                mInputLayout.setVisibility(View.INVISIBLE);
+                                                progress.setVisibility(View.VISIBLE);
+                                                progressbar.setProgress(100, 100);
+                                            }
+                                        });
+                                        try{
+                                            Thread.sleep(1500);
+                                        }catch (InterruptedException e) {}
+                                                Intent intent = new Intent(LoginActivity.this,Bottom.class);
+                                                startActivity(intent);
+                                                finish();
+                                                Looper.prepare();
+                                                Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                                                Looper.loop();
+
                                     }
-                                }catch (Exception e){
-                                    e.printStackTrace();
+                                    if (result.equals("false")){
+                                        Looper.prepare();
+                                        Toast.makeText(LoginActivity.this, "密码错误，请重新输入", Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+                                    }
+                                    Log.e("LoginActivity", "onResponse:" + result);
+                                } else {
+                                    Log.e("LoginActivity", "onResponse failed");
                                 }
                             }
-                        }.start();*/
-                   //     loginJudge(name,pass);
-
+                        });
                     }
                 }
             }
         });
     }
-    private void testAsyncGetRequest(String name ,String password) {
+   /* private void testAsyncGetRequest(String name ,String password) {
         OkHttpClient okHttpClient = new OkHttpClient()
                 .newBuilder()
                 .addInterceptor(new HttpInterceptor())
@@ -147,43 +163,16 @@ public class LoginActivity extends BaseActivity {
         };
         okHttpClient.newCall(request).enqueue(callback);//用okhttpClient执行request，并且注册回调函数
 
-    }
+    }*/
     public void init(){
+        progressbar = findViewById(R.id.progressBar2);
         login_name = (EditText) findViewById(R.id.et_zh);
         pass_word = (EditText) findViewById(R.id.et_mima);
         btn_login = (TextView) findViewById(R.id.main_btn_login);
         sms = (TextView) findViewById(R.id.textView26);
-    }
-    protected void loginJudge(final String userName, final String userPassword) {
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(100000, TimeUnit.SECONDS)
-                .readTimeout(100000, TimeUnit.SECONDS)
-                .writeTimeout(100000, TimeUnit.SECONDS)
-                .addInterceptor(new HttpInterceptor())
-                .build();;
-        RequestBody requestBody = new FormBody.Builder()
-                .add("username",userName)
-                .add("password",userPassword)
-                .build();
-        Request request = new Request.Builder()
-                .url("https://www.baidu.com")
-                .post(requestBody)
-                .build();
-        Callback callback = new Callback(){
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("LoginActivity", "request Failed ; " + e.getLocalizedMessage());
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    Log.e("LoginActivity", "onResponse:" + response.body().string());
-                } else {
-                    Log.e("LoginActivity", "onResponse failed");
-                }
-            }
-        };
-        okHttpClient.newCall(request).enqueue(callback);
-   //     Response response = okHttpClient.newCall(request).execute();
+        mInputLayout = findViewById(R.id.input_layout);
+        progress = findViewById(R.id.layout_progress);
+        login_name.setText("admin");
+        pass_word.setText("123");
     }
 }

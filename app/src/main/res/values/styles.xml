@@ -9,10 +9,13 @@
     </style>
     <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/anim_fade</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="colorPrimaryDark">#FFFFFF</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="VerifyTextStyle">
         <item name="android:textColor">@color/smssdk_tab_textcolor_selector</item>
         <item name="android:textSize">20sp</item>
@@ -24,11 +27,26 @@
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/anim_fade</item>
+        <item name="android:windowNoTitle">true</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <!--activity 淡入淡出-->
+    <style name="AnimActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/anim_fade</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="anim_fade" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/anim_fade_out</item>
+    </style>
 </resources>

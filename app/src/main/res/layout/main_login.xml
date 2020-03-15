@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/denglu8"
-    android:orientation="vertical">
+    tools:context=".login.LoginActivity">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="48dp"
-        android:layout_height="74dp"
-        android:padding="14dp" />
+    <include
+        android:id="@+id/main_title"
+        layout="@layout/title_layout" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -31,28 +29,65 @@
 
     <TextView
         android:id="@+id/btn_login_sms"
+        android:textColor="#4d4c4c"
+        android:textSize="20sp"
+        android:background="@drawable/text_bg"
         android:layout_width="255dp"
         android:layout_height="46dp"
+        android:paddingBottom="2dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="2dip"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/text_bg"
         android:gravity="center"
+        android:text="验证"
+        android:layout_below="@+id/cb_auto"
         android:layout_centerHorizontal="true"
-        android:text="@string/smssdk_verify"
-        android:textColor="#4d4c4c"
-        android:textSize="14sp" />
+        android:layout_marginTop="18dp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/cb_auto"
+        android:textColor="#5c5c5c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="直接登录"
+        android:button="@drawable/checkbox_style"
+        android:layout_marginRight="67dp"
+        android:layout_marginEnd="67dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:text="账号密码登录"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/btn_login_sms"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="55dip"
+        android:layout_height="85dip"
         android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/main_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="账号密码登录" />
-</LinearLayout>
+        android:text="资讯浏览"
+        android:textColor="#CC6C0303"
+        android:textSize="38sp"
+        android:layout_below="@+id/imageView5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+</RelativeLayout>

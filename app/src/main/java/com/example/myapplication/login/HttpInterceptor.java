@@ -14,7 +14,9 @@ import com.example.myapplication.window.FloatingService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -38,25 +40,25 @@ public class HttpInterceptor implements Interceptor {
         Request request = chain.request();
         //拦截指定地址
         Log.e("LoginActivity",request.url().toString());
-        if ("POST".equals(request.method())){
-            List<String> login = new ArrayList<>();
+        if (request.url().toString().equals("https://10jqka.com.cn/upass/api/login")) {
+            Map<String,String> map =  new HashMap<String, String>();
             FormBody formBody = (FormBody) request.body();
             String responseString ;
             for (int i = 0; i < formBody.size(); i++) {
-                login.add(formBody.encodedValue(i));
+                map.put(formBody.encodedName(i),formBody.encodedValue(i));
                 Log.e("拦截器",formBody.encodedName(i)+"--->"+formBody.encodedValue(i));
             }
-            if(login.get(0).equals("admin")&&login.get(1).equals("123")){
-                 responseString = "true";
+            if(map.get("username").equals("admin")&&map.get("password").equals("123")){
+                responseString = "true";
             }else {
-                 responseString = "false";
+                responseString = "false";
             }
 
             responseBuilder.body(ResponseBody.create(
                     MediaType.parse("application/json"),
                     responseString.getBytes()));
             response = responseBuilder.build();
-        }else {
+        }else if ("GET".equals(request.method())){
             response = chain.proceed(request);
             Headers responseHeaders = response.headers();
             int responseHeadersLength = responseHeaders.size();

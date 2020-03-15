@@ -28,6 +28,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.myapplication.Http.OkHttpUtil;
 import com.example.myapplication.login.HttpInterceptor;
 import com.example.myapplication.login.LoggingInterceptor;
 import com.example.myapplication.window.FloatingService;
@@ -140,7 +141,31 @@ public class ArticleContentShow extends AppCompatActivity {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 if (url.contains("html")){
-                    testAsyncGetRequest(url);
+
+                    OkHttpUtil.doGet(url, new Callback() {// 新建异步请求的回调函数
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e("LoginActivity", "request Failed ; " + e.getLocalizedMessage());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                            if (response.isSuccessful()) {
+                                response_print = response.body().toString();
+                                if (FloatingService.isStarted){
+                                    Intent bindtent = new Intent(ArticleContentShow.this , FloatingService.class);
+                                    bindService(bindtent,connect, Context.BIND_AUTO_CREATE);
+                                    unbindService(connect);
+
+                                }
+                                Log.e("LoginActivity", "--->"+response_print);
+
+                            } else {
+                                Log.e("LoginActivity", "onResponse failed");
+                            }
+                        }
+                    });
                 }
                 return null;
             }

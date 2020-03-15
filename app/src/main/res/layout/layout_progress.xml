@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -13,11 +14,13 @@
         android:orientation="vertical"
         android:padding="10dip" >
 
-        <ProgressBar
+        <com.example.myapplication.login.MyProgressbar
             android:id="@+id/progressBar2"
             android:layout_width="wrap_content"
             android:layout_margin="10dip"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:progressbar_width="240dp"
+            app:progressbar_height="45dp"/>
     </LinearLayout>
 
 </LinearLayout>

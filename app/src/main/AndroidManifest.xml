@@ -36,6 +36,11 @@
 
         </activity>
         <activity
+            android:name=".channel.ChannelActivity"
+            android:label="手机号">
+
+        </activity>
+        <activity
             android:name=".login.MainActivity"
             android:theme="@style/LoginTheme"
             android:label="短信登录">

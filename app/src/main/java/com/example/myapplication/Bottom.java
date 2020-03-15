@@ -1,9 +1,9 @@
 package com.example.myapplication;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.myapplication.channel.ChannelActivity;
 import com.example.myapplication.login.BaseActivity;
 import com.example.myapplication.window.FloatingService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,10 +47,9 @@ public class Bottom extends BaseActivity {
            setSupportActionBar(toolbar);
             toolbar.setTitle("资讯");
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()  {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -80,11 +79,11 @@ public class Bottom extends BaseActivity {
         viewPagerAdapter.setList(list);
 
     }
-    public void startFloate(View view) {
+    public void startFloate(View view)  {
         if (FloatingService.isStarted) {
             return;
         }
-        if (!Settings.canDrawOverlays(this)) {
+        if (!Settings.canDrawOverlays(this)){
             Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT);
             startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
         } else {
@@ -92,6 +91,9 @@ public class Bottom extends BaseActivity {
             FloatingService.isStarted=true;
             Log.e("service",String.valueOf(FloatingService.isStarted));
         }
+    }
+    public void startChannel(View view) {
+            startActivity(new Intent(Bottom.this, ChannelActivity.class));
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

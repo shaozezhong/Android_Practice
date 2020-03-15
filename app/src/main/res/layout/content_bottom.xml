@@ -35,6 +35,15 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:onClick="startFloate"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="我的频道"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:onClick="startChannel"/>
     </androidx.appcompat.widget.Toolbar>
 
     <com.example.myapplication.CustomViewPager
